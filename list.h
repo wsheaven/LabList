@@ -106,7 +106,7 @@ public:
    // Status
    //
 
-   bool empty()  const { return true; }
+   bool empty()  const { return pHead == NULL; }
    size_t size() const { return numElements;   }
 
 
@@ -274,7 +274,8 @@ template <typename T>
 list <T> ::list(size_t num)
 {
    pHead = pTail = new list <T> ::Node(); 
-   pHead.pNext = new Node(); 
+   //pHead
+
    
 }
 

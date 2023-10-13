@@ -42,7 +42,7 @@ public:
       test_constructRange_standard();
       test_destructor_empty();
       test_destructor_standard();
-      /*
+      
       // Assign
       test_assign_emptyToEmpty();
       test_assign_standardToEmpty();
@@ -119,7 +119,7 @@ public:
       test_size_three();
       test_empty_empty();
       test_empty_three();
-      */ 
+      
       report("List");
    }
 
