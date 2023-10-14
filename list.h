@@ -120,27 +120,29 @@ private:
    Node * pTail;    // pointer to the ending of the list
 };
 
-/*************************************************
- * NODE
- * the node class.  Since we do not validate any
- * of the setters, there is no point in making them
- * private.  This is the case because only the
- * List class can make validation decisions
- *************************************************/
-template <typename T>
-class list <T> :: Node
+ /*************************************************
+  * NODE
+  * the node class.  Since we do not validate any
+  * of the setters, there is no point in making them
+  * private.  This is the case because only the
+  * List class can make validation decisions
+  *************************************************/
+template <class T>
+class list <T>::Node
 {
 public:
+
    //
    // Construct
    //
-   Node(): pPrev(nullptr), pNext(nullptr)
+
+   Node()
    {
-      
+      pPrev = pNext = nullptr;
    }
    Node(const T& data) : data(data), pPrev(nullptr), pNext(nullptr)
    {
-      
+
    }
    Node(T&& data)
    {
@@ -148,14 +150,13 @@ public:
       pPrev = pNext = nullptr;
    }
 
-
    //
-   // Data
+   // Member variables
    //
 
    T data;                 // user data
-   Node * pNext;       // pointer to next node
-   Node * pPrev;       // pointer to previous node
+   list <T>::Node* pNext;       // pointer to next node
+   list <T>::Node* pPrev;       // pointer to previous node
 };
 
 /*************************************************
@@ -262,8 +263,11 @@ list <T> ::list(Iterator first, Iterator last)
 template <typename T>
 list <T> ::list(const std::initializer_list<T>& il)
 {
-   numElements = 99;
-   pHead = pTail = new list <T> ::Node();
+   pHead = nullptr;
+   pTail = nullptr;
+   for (int num : il) {
+      push_back(num);
+   }
 }
 
 /*****************************************
@@ -273,10 +277,8 @@ list <T> ::list(const std::initializer_list<T>& il)
 template <typename T>
 list <T> ::list(size_t num)
 {
-   pHead = pTail = new list <T> ::Node(); 
-   //pHead
-
-   
+   pHead = pTail = new list <T> ::Node(num); 
+   numElements = 1;
 }
 
 /*****************************************
@@ -295,8 +297,12 @@ list <T> ::list()
 template <typename T>
 list <T> ::list(list& rhs) 
 {
-   numElements = 99;
-   pHead = pTail = new list <T> ::Node();
+   pHead = nullptr;
+   pTail = nullptr;
+   for (list <T> ::Node* i = pHead; i != nullptr; i = i->pNext)
+   {
+      push_back(i->data);
+   }
 }
 
 /*****************************************
@@ -306,8 +312,13 @@ list <T> ::list(list& rhs)
 template <typename T>
 list <T> ::list(list <T>&& rhs)
 {
-   numElements = 99;
-   pHead = pTail = new list <T> ::Node();
+   this->numElements = rhs.numElements;
+   this->pHead = rhs.pHead;
+   this->pTail = rhs.pTail;
+
+   rhs.pHead = nullptr;
+   rhs.pTail = nullptr;
+   rhs.numElements = 0;
 }
 
 /**********************************************
@@ -359,7 +370,10 @@ list <T>& list <T> :: operator = (const std::initializer_list<T>& rhs)
 template <typename T>
 void list <T> :: clear()
 {
-
+   while (this->pHead != nullptr)
+   {
+      pop_back();
+   }
 }
 
 /*********************************************
@@ -372,13 +386,25 @@ void list <T> :: clear()
 template <typename T>
 void list <T> :: push_back(const T & data)
 {
-
+   list <T> ::Node* newNode = new list <T> ::Node(data);
+   newNode->pNext = nullptr;
+   newNode->pPrev = pTail;
+   if(pTail != nullptr)
+      pTail->pNext = newNode;
+   pTail = newNode;
+   numElements++;
 }
 
 template <typename T>
 void list <T> ::push_back(T && data)
 {
-
+   list <T> ::Node* newNode = new list <T> ::Node(std::move(data));
+   newNode->pNext = nullptr;
+   newNode->pPrev = pTail;
+   if (pTail != nullptr)
+      pTail->pNext = newNode;
+   pTail = newNode;
+   numElements++;
 }
 
 /*********************************************
@@ -391,13 +417,26 @@ void list <T> ::push_back(T && data)
 template <typename T>
 void list <T> :: push_front(const T & data)
 {
+   list <T> ::Node* newNode = new list <T> ::Node(data);
+   newNode->pNext = pHead;
+   newNode->pPrev = nullptr;
+   if (pHead != nullptr)
+      pHead->pPrev = newNode;
+   pHead = newNode;
+   numElements++;
 
 }
 
 template <typename T>
 void list <T> ::push_front(T && data)
 {
-
+   list <T> ::Node* newNode = new list <T> ::Node(std::move(data));
+   newNode->pNext = pHead;
+   newNode->pPrev = nullptr;
+   if (pHead != nullptr)
+      pHead->pPrev = newNode;
+   pHead = newNode;
+   numElements++;
 }
 
 
@@ -411,7 +450,20 @@ void list <T> ::push_front(T && data)
 template <typename T>
 void list <T> ::pop_back()
 {
+   if (pTail == nullptr) {
+      return;
+   }
 
+   if (pTail->pPrev != nullptr) {
+      pTail->pPrev->pNext = nullptr;
+   }
+   else {
+      pHead = nullptr;
+   }
+
+   delete pTail;
+   pTail = pTail->pPrev;
+   numElements--;
 }
 
 /*********************************************
@@ -424,7 +476,22 @@ void list <T> ::pop_back()
 template <typename T>
 void list <T> ::pop_front()
 {
+   if (pHead == nullptr) {
+      return;
+   }
 
+   if (pHead->pNext != nullptr) {
+      pHead->pNext->pPrev = nullptr;
+   }
+   else {
+      pTail = nullptr;
+   }
+
+   list<T>::Node* temp = pHead;
+   pHead = pHead->pNext;
+
+   delete temp;
+   numElements--;
 }
 
 /*********************************************
@@ -437,7 +504,8 @@ void list <T> ::pop_front()
 template <typename T>
 T & list <T> :: front()
 {
-   return *(new T);
+   if(pHead != nullptr)
+      return pHead->data;
 }
 
 /*********************************************
@@ -450,7 +518,8 @@ T & list <T> :: front()
 template <typename T>
 T & list <T> :: back()
 {
-   return *(new T);
+   if (pTail != nullptr)
+      return pTail->data;
 }
 
 /******************************************
@@ -498,12 +567,33 @@ typename list <T> :: iterator list <T> :: insert(list <T> :: iterator it,
 template <typename T>
 void swap(list <T> & lhs, list <T> & rhs)
 {
+   list <T> ::Node* tempHead = rhs.pHead;
+   rhs.pHead = lhs.pHead;
+   lhs.pHead = tempHead;
 
+   list <T> ::Node* tempTail = rhs.pTail;
+   rhs.pTail = lhs.pTail;
+   lhs.pTail = tempTail;
+
+   int tempElements = rhs.numElements;
+   rhs.numElements = lhs.numElements;
+   lhs.numElements = tempElements;
 }
 
 template <typename T>
 void list<T>::swap(list <T>& rhs)
 {
+   list <T> ::Node* tempHead = rhs.pHead;
+   rhs.pHead = pHead;
+   pHead = tempHead;
+
+   list <T> ::Node* tempTail = rhs.pTail;
+   rhs.pTail = pTail;
+   pTail = tempTail;
+
+   int tempElements = rhs.numElements;
+   rhs.numElements = numElements;
+   numElements = tempElements;
 }
 
 //#endif
