@@ -320,7 +320,18 @@ list <T> ::list(list <T>&& rhs)
 template <typename T>
 list <T>& list <T> :: operator = (list <T> && rhs)
 {
+   if (this != &rhs) {
+      pHead = rhs.pHead;
+      pTail = rhs.pTail;
+      numElements = rhs.numElements;
+
+      // Reset rhs
+      rhs.pHead = nullptr;
+      rhs.pTail = nullptr;
+      rhs.numElements = 0;
+   }
    return *this;
+
 }
 
 /**********************************************
@@ -359,7 +370,13 @@ list <T>& list <T> :: operator = (const std::initializer_list<T>& rhs)
 template <typename T>
 void list <T> :: clear()
 {
-
+   /*
+   while (pHead != NULL)
+   {
+      pDelete = pHead;
+      pHead = pHead->pNext;
+      delete pDelete;
+   }*/ 
 }
 
 /*********************************************
@@ -437,7 +454,16 @@ void list <T> ::pop_front()
 template <typename T>
 T & list <T> :: front()
 {
-   return *(new T);
+   if (pHead != NULL){
+      return pHead->data;
+     
+   }
+   else
+   {
+   const char* sError = "ERROR: unable to access data from an empty list";
+   throw sError;
+   }
+   
 }
 
 /*********************************************
@@ -450,7 +476,15 @@ T & list <T> :: front()
 template <typename T>
 T & list <T> :: back()
 {
-   return *(new T);
+   if (pTail != NULL) {
+      return pTail->data;
+
+   }
+   else
+   {
+      const char* sError = "ERROR: unable to access data from an empty list";
+      throw sError;
+   }
 }
 
 /******************************************

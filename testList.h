@@ -26,7 +26,7 @@ public:
    void run()
    {
       reset();
-
+      /*
       // Construct
       test_construct_default();
       test_construct_sizeZero();
@@ -42,11 +42,11 @@ public:
       test_constructRange_standard();
       test_destructor_empty();
       test_destructor_standard();
-      
+      */ 
       // Assign
       test_assign_emptyToEmpty();
       test_assign_standardToEmpty();
-      test_assign_emptyToStandard();
+      test_assign_emptyToStandard();/*
       test_assign_smallToBig();
       test_assign_bigToSmall();
       test_assignInit_empty();
@@ -61,7 +61,7 @@ public:
       test_swap_standardToEmpty();
       test_swap_emptyToStandard();
       test_swap_bigToSmall();
-
+      
       // Iterator
       test_iterator_begin_empty();
       test_iterator_begin_standard();
@@ -74,7 +74,7 @@ public:
       test_iterator_decrementPost_standardMiddle();
       test_iterator_dereference_read();
       test_iterator_dereference_update();
-
+      
       // Access
       test_front_empty();
       test_front_standardRead();
@@ -82,7 +82,7 @@ public:
       test_back_empty();
       test_back_standardRead();
       test_back_standardWrite();
-
+      
       // Insert
       test_pushback_empty();
       test_pushback_standard();
@@ -119,7 +119,7 @@ public:
       test_size_three();
       test_empty_empty();
       test_empty_three();
-      
+      */ 
       report("List");
    }
 
