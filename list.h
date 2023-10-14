@@ -344,7 +344,17 @@ list <T>& list <T> :: operator = (list <T> && rhs)
 template <typename T>
 list <T> & list <T> :: operator = (list <T> & rhs)
 {
-   return *this;
+    /*
+    if (this != &rhs) { 
+   
+        this->clear(); 
+ 
+        for (const T& item : rhs) {
+            push_back(item);
+        }
+    }
+    */
+    return *this;
 }
 
 /**********************************************
@@ -389,13 +399,50 @@ void list <T> :: clear()
 template <typename T>
 void list <T> :: push_back(const T & data)
 {
+    
+    // Create a new node with the provided data
+    Node* newNode = new Node(data);
 
+    newNode->pPrev = pTail; 
+   
+
+    if (pHead == NULL) {
+        // If the list is empty, set the new node as both head and tail
+        pHead = newNode;
+        pTail = newNode;
+    }
+    else {
+        // Otherwise, append the new node to the current tail's next
+        newNode->pPrev = pTail;
+        pTail->pNext = newNode; 
+        pTail = newNode;
+    } 
+
+    numElements++; 
 }
 
 template <typename T>
 void list <T> ::push_back(T && data)
 {
+    // Create a new node with the provided data
+    Node* newNode = new Node(data);
 
+    newNode->pPrev = pTail;
+
+
+    if (pHead == NULL) {
+        // If the list is empty, set the new node as both head and tail
+        pHead = newNode;
+        pTail = newNode;
+    }
+    else {
+        // Otherwise, append the new node to the current tail's next
+        newNode->pPrev = pTail; 
+        pTail->pNext = newNode; 
+        pTail = newNode;
+    }
+
+    numElements++;
 }
 
 /*********************************************
@@ -408,13 +455,39 @@ void list <T> ::push_back(T && data)
 template <typename T>
 void list <T> :: push_front(const T & data)
 {
+    // Create a new node with the provided data
+    Node* pNew = new Node(data);
 
+    // If the list is empty, set the new node as both head and tail
+    if (pHead == NULL) { 
+        pHead = pTail = pNew; 
+    }
+    else {
+        pNew->pNext = pHead; 
+        pHead->pPrev = pNew; 
+        pHead = pNew; 
+    }
+
+    numElements++; 
 }
 
 template <typename T>
 void list <T> ::push_front(T && data)
 {
+    // Create a new node with the provided data
+    Node* pNew = new Node(data);
 
+    // If the list is empty, set the new node as both head and tail
+    if (pHead == NULL) {
+        pHead = pTail = pNew;
+    }
+    else {
+        pNew->pNext = pHead;
+        pHead->pPrev = pNew;
+        pHead = pNew;
+    }
+
+    numElements++;
 }
 
 

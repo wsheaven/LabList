@@ -26,7 +26,7 @@ public:
    void run()
    {
       reset();
-      /*
+      ///*
       // Construct
       test_construct_default();
       test_construct_sizeZero();
@@ -42,11 +42,11 @@ public:
       test_constructRange_standard();
       test_destructor_empty();
       test_destructor_standard();
-      */ 
+      
       // Assign
       test_assign_emptyToEmpty();
       test_assign_standardToEmpty();
-      test_assign_emptyToStandard();/*
+      test_assign_emptyToStandard(); // /*
       test_assign_smallToBig();
       test_assign_bigToSmall();
       test_assignInit_empty();
@@ -82,16 +82,16 @@ public:
       test_back_empty();
       test_back_standardRead();
       test_back_standardWrite();
-      
+      //*/ 
       // Insert
       test_pushback_empty();
       test_pushback_standard();
       test_pushback_moveEmpty();
       test_pushback_moveStandard();
-      test_pushfront_empty();
+      test_pushfront_empty(); 
       test_pushfront_standard();
       test_pushfront_moveEmpty();
-      test_pushfront_moveStandard();
+      test_pushfront_moveStandard();///*
       test_insert_empty();
       test_insert_standardFront();
       test_insert_standardMiddle();
@@ -119,7 +119,7 @@ public:
       test_size_three();
       test_empty_empty();
       test_empty_three();
-      */ 
+     //  */ 
       report("List");
    }
 
